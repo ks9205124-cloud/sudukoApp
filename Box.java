@@ -20,6 +20,7 @@ public class Box {
         fc = new FactorGenerator(ROW_COLUMN_COUNT);
 
         index = new int[ROW_COLUMN_COUNT][ROW_COLUMN_COUNT];
+
     }
 
     ArrayList<Integer> rowInedx = new ArrayList<>();
@@ -41,61 +42,93 @@ public class Box {
                 int pos1 = ROW_COLUMN_COUNT * i + j;
                 indexReff.add(Integer.toString(transformRight(pos1, 0)));
                 indexReff.add(Integer.toString(transformDown(pos1, 0)));
-
-//                this is hardCode version that only works for 9*9 suduko,above code is currently under development for easy use.
-//                int testInt = ROW_COLUMN_COUNT * i + j;
-//                if (j == 0) {
-//                    if (i == 0) {
-//                        indexReff.add(Integer.toString(testInt));
-//                    } else if (i == fc.ROWS()) {
-//                        indexReff.add(Integer.toString(transformRight(testInt)));
-//                    } else if (i == fc.ROWS() + fc.ROWS()) {
-//                        int tst = transformRight(testInt);
-//                        indexReff.add(Integer.toString(transformRight(tst)));
-//                    }
-//                } else if (j == fc.COLUMS()) {
-//                    int tstDown = transformDown(testInt);
-//                    if (i == 0) {
-//                        indexReff.add(Integer.toString(tstDown));
-//                    } else if (i == fc.ROWS()) {
-//                        indexReff.add(Integer.toString(transformRight(tstDown)));
-//                    } else if (i == fc.ROWS() + fc.ROWS()) {
-//                        int tst = transformRight(tstDown);
-//                        indexReff.add(Integer.toString(transformRight(tst)));
-//                    }
-//                } else if (j == fc.COLUMS() + fc.COLUMS()) {
-//                    int tst1 = transformDown(testInt);
-//                    int tst2 = transformDown(tst1);
-//                    if (i == 0) {
-//                        indexReff.add(Integer.toString(tst2));
-//                    } else if (i == fc.ROWS()) {
-//                        indexReff.add(Integer.toString(transformRight(tst2)));
-//                    } else if (i == fc.ROWS() + fc.ROWS()) {
-//                        int tst = transformRight(tst2);
-//                        indexReff.add(Integer.toString(transformRight(tst)));
-//                    }
-//                } else {
-//                    System.err.println("sexy");
-//                }
             }
         }
     }
 
     //bounding must be added  in later stages.
     public int transformLeft(int reffIndex, int numberOfTimesToShift) {
-        return reffIndex - 1 * numberOfTimesToShift;
+        boolean check = false;
+
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+            if (i != ROW_COLUMN_COUNT) {
+                for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+                    if (ROW_COLUMN_COUNT * i  + j == reffIndex) {
+                        check = true;
+                    }
+                }
+            }
+        }
+
+        if (check == true) {
+            int operand = fc.ROWS()- 1;
+            return reffIndex + 1 * operand;
+        } else {
+            return reffIndex - 1 * numberOfTimesToShift;
+        }
     }
 
     public int transformRight(int reffIndex, int numberOfTimesToShift) {
-        return reffIndex + 1 * numberOfTimesToShift;
+        boolean check = false;
+
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+            if (i != 0) {
+                for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+                    if (ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j == reffIndex) {
+                        check = true;
+                    }
+                }
+            }
+        }
+
+        if (check == true) {
+            int operand = fc.ROWS()- 1;
+            return reffIndex - 1 * operand;
+        } else {
+            return reffIndex + 1 * numberOfTimesToShift;
+        }
+        //return reffIndex + 1 * numberOfTimesToShift;
     }
 
     public int transformUp(int reffIndex, int numberOfTimesToShift) {
-        return reffIndex - 9 * numberOfTimesToShift;
+        boolean check = false;
+
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
+            if (i != ROW_COLUMN_COUNT) {
+                for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+                    if (ROW_COLUMN_COUNT * i  + j == reffIndex) {
+                        check = true;
+                    }
+                }
+            }
+        }
+
+        if (check == true) {
+            int operand = fc.COLUMS() - 1;
+            return reffIndex + 9 * operand;
+        } else {
+            return reffIndex - 9 * numberOfTimesToShift;
+        }
     }
 
     public int transformDown(int reffIndex, int numberOfTimesToShift) {
-        return reffIndex + 9 * numberOfTimesToShift;
-    }
+        boolean check = false;
 
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
+            if (i != 0) {
+                for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+                    if (ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j == reffIndex) {
+                        check = true;
+                    }
+                }
+            }
+        }
+
+        if (check == true) {
+            int operand = fc.COLUMS() - 1;
+            return reffIndex - 9 * operand;
+        } else {
+            return reffIndex + 9 * numberOfTimesToShift;
+        }
+    }
 }
