@@ -22,17 +22,28 @@ public class Box {
         index = new int[ROW_COLUMN_COUNT][ROW_COLUMN_COUNT];
     }
 
-    
     ArrayList<Integer> rowInedx = new ArrayList<>();
+    ArrayList<Integer> columnInedx = new ArrayList<>();
+
     public void GeneratePos1Index() {
         for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
-                rowInedx.add(i);
-                System.err.println(rowInedx.get(i));
-                
-                
-//                int testInt = ROW_COLUMN_COUNT * i + j;
+                if (!rowInedx.contains(i)) {
+                    rowInedx.add(i);
+                    //System.err.println(rowInedx);
+                } else {/*do nothig*/
+                }
+                if (!columnInedx.contains(i)) {
+                    columnInedx.add(i);
+                    //System.err.println(rowInedx);
+                } else {/*do nothig*/
+                }
+                int pos1 = ROW_COLUMN_COUNT * i + j;
+                indexReff.add(Integer.toString(transformRight(pos1, 0)));
+                indexReff.add(Integer.toString(transformDown(pos1, 0)));
 
+//                this is hardCode version that only works for 9*9 suduko,above code is currently under development for easy use.
+//                int testInt = ROW_COLUMN_COUNT * i + j;
 //                if (j == 0) {
 //                    if (i == 0) {
 //                        indexReff.add(Integer.toString(testInt));
@@ -70,20 +81,21 @@ public class Box {
         }
     }
 
-    public int transformLeft(int reffIndex) {
-        return reffIndex - 1;
+    //bounding must be added  in later stages.
+    public int transformLeft(int reffIndex, int numberOfTimesToShift) {
+        return reffIndex - 1 * numberOfTimesToShift;
     }
 
-    public int transformRight(int reffIndex) {
-        return reffIndex + 1;
+    public int transformRight(int reffIndex, int numberOfTimesToShift) {
+        return reffIndex + 1 * numberOfTimesToShift;
     }
 
-    public int transformUp(int reffIndex) {
-        return reffIndex - 9;
+    public int transformUp(int reffIndex, int numberOfTimesToShift) {
+        return reffIndex - 9 * numberOfTimesToShift;
     }
 
-    public int transformDown(int reffIndex) {
-        return reffIndex + 9;
+    public int transformDown(int reffIndex, int numberOfTimesToShift) {
+        return reffIndex + 9 * numberOfTimesToShift;
     }
 
 }
