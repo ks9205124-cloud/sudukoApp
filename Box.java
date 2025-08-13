@@ -105,9 +105,9 @@ public class Box {
 
         if (check == true) {
             int operand = fc.COLUMS() - 1;
-            return reffIndex + 9 * operand;
+            return reffIndex + ROW_COLUMN_COUNT * operand;
         } else {
-            return reffIndex - 9 * numberOfTimesToShift;
+            return reffIndex - ROW_COLUMN_COUNT * numberOfTimesToShift;
         }
     }
 
@@ -126,9 +126,9 @@ public class Box {
 
         if (check == true) {
             int operand = fc.COLUMS() - 1;
-            return reffIndex - 9 * operand;
+            return reffIndex - ROW_COLUMN_COUNT * operand;
         } else {
-            return reffIndex + 9 * numberOfTimesToShift;
+            return reffIndex + ROW_COLUMN_COUNT * numberOfTimesToShift;
         }
     }
 }
