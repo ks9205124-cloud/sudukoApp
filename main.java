@@ -11,7 +11,7 @@ public class main {
         //here 900,700 defines width and height of the respective grid
         //while 9 is the number of gridBoxes to generate//
         UI ui = new UI();
-        ui.CreateSuduko(900, 700, 8);
+        ui.CreateSuduko(900, 700, 9);
     }
     
 }
