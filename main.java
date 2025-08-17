@@ -7,11 +7,11 @@ package suduko;
 public class main {
 
     public static void main(String[] args) {
+//        Box bx = new Box(9);
         // TODO code application logic here
-        //here 900,700 defines width and height of the respective grid
-        //while 9 is the number of gridBoxes to generate//
         UI ui = new UI();
         ui.CreateSuduko(900, 700, 9);
+        
     }
     
 }

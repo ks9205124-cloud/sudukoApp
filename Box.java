@@ -20,115 +20,183 @@ public class Box {
         fc = new FactorGenerator(ROW_COLUMN_COUNT);
 
         index = new int[ROW_COLUMN_COUNT][ROW_COLUMN_COUNT];
-
     }
 
     ArrayList<Integer> rowInedx = new ArrayList<>();
     ArrayList<Integer> columnInedx = new ArrayList<>();
+    ArrayList<Integer> pos = new ArrayList<>();
 
     public void GeneratePos1Index() {
         for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
                 if (!rowInedx.contains(i)) {
                     rowInedx.add(i);
-                    //System.err.println(rowInedx);
                 } else {/*do nothig*/
                 }
                 if (!columnInedx.contains(i)) {
                     columnInedx.add(i);
-                    //System.err.println(rowInedx);
                 } else {/*do nothig*/
                 }
-                int pos1 = ROW_COLUMN_COUNT * i + j;
-                indexReff.add(Integer.toString(transformRight(pos1, 0)));
-                indexReff.add(Integer.toString(transformDown(pos1, 0)));
+                pos.add(ROW_COLUMN_COUNT * i + j);
+//                indexReff.add(Integer.toString(transformRight(ROW_COLUMN_COUNT * i + j, UpDownshiftIndex(ROW_COLUMN_COUNT * i + j))));
+//                System.err.println(UpDownshiftIndex(ROW_COLUMN_COUNT * i + j));
             }
         }
+        for (int i = 0; i < pos.size(); i++) {
+            indexReff.add(Integer.toString(transformDown(pos.get(i), ROW_COLUMN_COUNT + UpDownshiftIndex(pos.get(i)))));
+//            System.err.println(indexs.get(i));
+//            System.err.println(pos.get(i));
+        }
+        
+    }
+
+    public int LeftRightShiftIndex(int reffIndex) {
+        ArrayList<Integer> index = new ArrayList<>();
+        ArrayList<Integer> arranger = new ArrayList<>();
+        for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+            index.add(i);
+        }
+        for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+            for (int i = 0; i < fc.ROWS(); i++) {
+                if (reffIndex >= ROW_COLUMN_COUNT * j + index.get(i)) {
+                    arranger.add(i);
+                }
+            }
+        }
+        return arranger.getLast();
+    }
+
+    public int UpDownshiftIndex(int reffIndex) {
+        ArrayList<Integer> index = new ArrayList<>();
+        ArrayList<Integer> arranger = new ArrayList<>();
+        for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
+            index.add(i);
+        }
+        for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
+            for (int i = 0; i < fc.COLUMS(); i++) {
+                if (reffIndex >= ROW_COLUMN_COUNT * j + index.get(i)) {
+                    arranger.add(i);
+                }
+            }
+        }
+        return arranger.getLast();
     }
 
     //bounding must be added  in later stages.
     public int transformLeft(int reffIndex, int numberOfTimesToShift) {
-        boolean check = false;
+        ArrayList<Integer> bounds = new ArrayList<>();
+        ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
         for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             if (i != ROW_COLUMN_COUNT) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-                    if (ROW_COLUMN_COUNT * i  + j == reffIndex) {
-                        check = true;
-                    }
+                    bounds.add(ROW_COLUMN_COUNT * j + i);
                 }
             }
         }
+        do {
+            numberOfTimesToShift--;
+            if (bounds.contains(reffIndex)) {
+                int operand = fc.ROWS() - 1;
+                reffIndex = reffIndex + 1 * operand;
+            } else {
+                reffIndex = reffIndex - 1;
+            }
 
-        if (check == true) {
-            int operand = fc.ROWS()- 1;
-            return reffIndex + 1 * operand;
-        } else {
-            return reffIndex - 1 * numberOfTimesToShift;
-        }
+            if (!generatedIndexs.contains(reffIndex)) {
+                generatedIndexs.add(reffIndex);
+            }
+        } while (numberOfTimesToShift > 0);
+        
+        return reffIndex;
+
     }
 
     public int transformRight(int reffIndex, int numberOfTimesToShift) {
-        boolean check = false;
+        ArrayList<Integer> bounds = new ArrayList<>();
+        ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
         for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             if (i != 0) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-                    if (ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j == reffIndex) {
-                        check = true;
-                    }
+                    bounds.add(ROW_COLUMN_COUNT * j + i - 1);
+
                 }
             }
         }
 
-        if (check == true) {
-            int operand = fc.ROWS()- 1;
-            return reffIndex - 1 * operand;
-        } else {
-            return reffIndex + 1 * numberOfTimesToShift;
-        }
-        //return reffIndex + 1 * numberOfTimesToShift;
+        do {
+            numberOfTimesToShift--;
+            if (bounds.contains(reffIndex)) {
+                int operand = fc.ROWS() - 1;
+                reffIndex = reffIndex - 1 * operand;
+            } else {
+                reffIndex = reffIndex + 1;
+            }
+
+            if (!generatedIndexs.contains(reffIndex)) {
+                generatedIndexs.add(reffIndex);
+            }
+        } while (numberOfTimesToShift > 0);
+
+        return reffIndex;
     }
 
     public int transformUp(int reffIndex, int numberOfTimesToShift) {
-        boolean check = false;
+        ArrayList<Integer> bounds = new ArrayList<>();
+        ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
         for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
             if (i != ROW_COLUMN_COUNT) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-                    if (ROW_COLUMN_COUNT * i  + j == reffIndex) {
-                        check = true;
-                    }
+                    bounds.add(ROW_COLUMN_COUNT * i + j);
                 }
             }
         }
 
-        if (check == true) {
-            int operand = fc.COLUMS() - 1;
-            return reffIndex + ROW_COLUMN_COUNT * operand;
-        } else {
-            return reffIndex - ROW_COLUMN_COUNT * numberOfTimesToShift;
-        }
+        do {
+            numberOfTimesToShift--;
+            if (bounds.contains(reffIndex)) {
+                int operand = fc.COLUMS() - 1;
+                reffIndex = reffIndex + ROW_COLUMN_COUNT * operand;
+            } else {
+                reffIndex = reffIndex - ROW_COLUMN_COUNT;
+            }
+
+            if (!generatedIndexs.contains(reffIndex)) {
+                generatedIndexs.add(reffIndex);
+            }
+        } while (numberOfTimesToShift > 0);
+
+        return reffIndex;
     }
 
     public int transformDown(int reffIndex, int numberOfTimesToShift) {
-        boolean check = false;
+        ArrayList<Integer> bounds = new ArrayList<>();
+        ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
         for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
             if (i != 0) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-                    if (ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j == reffIndex) {
-                        check = true;
-                    }
+                    bounds.add(ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j);
                 }
             }
         }
+        do {
+            numberOfTimesToShift--;
+            if (bounds.contains(reffIndex)) {
+                int operand = fc.COLUMS() - 1;
+                reffIndex = reffIndex - ROW_COLUMN_COUNT * operand;
+            } else {
+                reffIndex = reffIndex + ROW_COLUMN_COUNT;
+            }
 
-        if (check == true) {
-            int operand = fc.COLUMS() - 1;
-            return reffIndex - ROW_COLUMN_COUNT * operand;
-        } else {
-            return reffIndex + ROW_COLUMN_COUNT * numberOfTimesToShift;
-        }
+            if (!generatedIndexs.contains(reffIndex)) {
+                generatedIndexs.add(reffIndex);
+            }
+        } while (numberOfTimesToShift > 0);
+
+        return reffIndex;
     }
+
 }

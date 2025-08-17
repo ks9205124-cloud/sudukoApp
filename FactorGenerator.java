@@ -18,7 +18,7 @@ public class FactorGenerator {
     // sirf do factor chahiye and factor1 and factor2 ko multiply karne par same number chahiye!!
     private void GenerateFactor() {
         for (int i = 1; i <= number; i++) {
-            for (int j = 1; j < +number; j++) {
+            for (int j = 1; j < + number; j++) {
                 if (number % i == 0 && i != 1 && i != number) {
                     if (number % j == 0 && j != 1 && j != number) {
                         if (i * i == number) {
@@ -37,7 +37,7 @@ public class FactorGenerator {
             }
         }
     }
-
+    
     public int ROWS() {
         return myRow;
     }
