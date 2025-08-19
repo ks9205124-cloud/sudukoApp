@@ -8,11 +8,20 @@ import java.util.ArrayList;
 
 public class Box {
 
+    int ROW_COLUMN_COUNT;
+
     public int[][] index;
     public ArrayList<String> indexReff = new ArrayList<>();
-
-    int ROW_COLUMN_COUNT;
+    //generates rows and columns for  suduko.
     FactorGenerator fc;
+    //generates the pos to add transformation on.
+    ArrayList<Integer> posDefault = new ArrayList<>();
+    //generates the number of times to shift.
+    ArrayList<Integer> transfRow_ShiftIndexs = new ArrayList<>();
+    ArrayList<Integer> transfColumn_ShiftIndes = new ArrayList<>();
+    //temp data of columns generated.
+    ArrayList<Integer> data_TransformedRow = new ArrayList<>();
+    ArrayList<Integer> data_TransformedColumn = new ArrayList<>();
 
     public Box(int ROW_COLUMN_COUNT) {
 
@@ -22,64 +31,91 @@ public class Box {
         index = new int[ROW_COLUMN_COUNT][ROW_COLUMN_COUNT];
     }
 
-    ArrayList<Integer> rowInedx = new ArrayList<>();
-    ArrayList<Integer> columnInedx = new ArrayList<>();
-    ArrayList<Integer> pos = new ArrayList<>();
-
     public void GeneratePos1Index() {
+        posDefault.clear();
+        
+        transfColumn_ShiftIndes.clear();
+        transfRow_ShiftIndexs.clear();
+        
+        data_TransformedColumn.clear();
+        data_TransformedRow.clear();
+        
+        /*for (int rows = 0; rows < fc.ROWS(); rows++) {
+            for (int columns = 0; columns < fc.COLUMS(); columns++) {
+                for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+                    for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
+                        if (!posDefault.contains(ROW_COLUMN_COUNT * (i + rows) + (j + columns))) {
+                            posDefault.add(ROW_COLUMN_COUNT * (i + rows) + (j + columns));
+                        }
+                    }
+
+                }
+            }
+        }*/
         for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
-                if (!rowInedx.contains(i)) {
-                    rowInedx.add(i);
-                } else {/*do nothig*/
+                if (!posDefault.contains(ROW_COLUMN_COUNT * i + j)) {
+                    posDefault.add(ROW_COLUMN_COUNT * i + j);
                 }
-                if (!columnInedx.contains(i)) {
-                    columnInedx.add(i);
-                } else {/*do nothig*/
-                }
-                pos.add(ROW_COLUMN_COUNT * i + j);
-//                indexReff.add(Integer.toString(transformRight(ROW_COLUMN_COUNT * i + j, UpDownshiftIndex(ROW_COLUMN_COUNT * i + j))));
-//                System.err.println(UpDownshiftIndex(ROW_COLUMN_COUNT * i + j));
             }
-        }
-        for (int i = 0; i < pos.size(); i++) {
-            indexReff.add(Integer.toString(transformDown(pos.get(i), ROW_COLUMN_COUNT + UpDownshiftIndex(pos.get(i)))));
-//            System.err.println(indexs.get(i));
-//            System.err.println(pos.get(i));
-        }
-        
-    }
 
-    public int LeftRightShiftIndex(int reffIndex) {
-        ArrayList<Integer> index = new ArrayList<>();
-        ArrayList<Integer> arranger = new ArrayList<>();
+        }
+        for (int i = 0; i < posDefault.size(); i++) {
+            transfRow_ShiftIndexs.add(Y_Indexs(posDefault.get(i)));
+            data_TransformedRow.add(transformDown(posDefault.get(i), ROW_COLUMN_COUNT + transfRow_ShiftIndexs.get(i)));
+            transfColumn_ShiftIndes.add(X_Indexs(data_TransformedRow.get(i)));
+            data_TransformedColumn.add(transformRight(data_TransformedRow.get(i), ROW_COLUMN_COUNT + transfColumn_ShiftIndes.get(i)));
+            indexReff.add(Integer.toString(data_TransformedColumn.get(i)));
+        }
+
+    }
+    
+
+    public int X_Indexs(int reffIndex) {
+        ArrayList<Integer> rowData = new ArrayList<>();
+        ArrayList<Integer> bounds = new ArrayList<>();
+        ArrayList<Integer> shiftIndex = new ArrayList<>();
+
         for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
-            index.add(i);
+            rowData.add(i);
         }
-        for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-            for (int i = 0; i < fc.ROWS(); i++) {
-                if (reffIndex >= ROW_COLUMN_COUNT * j + index.get(i)) {
-                    arranger.add(i);
-                }
+        for (int arrayIndex = 0; arrayIndex < rowData.size(); arrayIndex++) {
+            if (!bounds.contains(ROW_COLUMN_COUNT * rowData.get(arrayIndex))) {
+                bounds.add(ROW_COLUMN_COUNT * rowData.get(arrayIndex));
             }
         }
-        return arranger.getLast();
+
+        for (int i = 0; i < bounds.size(); i++) {
+            if (reffIndex >= bounds.get(i)) {
+                shiftIndex.add(i);
+            }
+        }
+        return shiftIndex.getLast();
     }
 
-    public int UpDownshiftIndex(int reffIndex) {
-        ArrayList<Integer> index = new ArrayList<>();
-        ArrayList<Integer> arranger = new ArrayList<>();
+    public int Y_Indexs(int reffIndex) {
+        int myInt = 0;
+
+        ArrayList<Integer> columnData = new ArrayList<>();
+        ArrayList<Integer> bounds = new ArrayList<>();
         for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
-            index.add(i);
+            if (!columnData.contains(i)) {
+                columnData.add(i);
+            }
         }
-        for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-            for (int i = 0; i < fc.COLUMS(); i++) {
-                if (reffIndex >= ROW_COLUMN_COUNT * j + index.get(i)) {
-                    arranger.add(i);
+        for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
+            if (!bounds.contains(ROW_COLUMN_COUNT * i)) {
+                bounds.add(ROW_COLUMN_COUNT * i);
+            }
+        }
+        for (int i = 0; i < bounds.size(); i++) {
+            for (int j = 0; j < columnData.size(); j++) {
+                if (reffIndex >= bounds.get(i) + columnData.get(j)) {
+                    myInt = j;
                 }
             }
         }
-        return arranger.getLast();
+        return myInt;
     }
 
     //bounding must be added  in later stages.
@@ -87,7 +123,7 @@ public class Box {
         ArrayList<Integer> bounds = new ArrayList<>();
         ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
-        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
             if (i != ROW_COLUMN_COUNT) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
                     bounds.add(ROW_COLUMN_COUNT * j + i);
@@ -97,7 +133,7 @@ public class Box {
         do {
             numberOfTimesToShift--;
             if (bounds.contains(reffIndex)) {
-                int operand = fc.ROWS() - 1;
+                int operand = fc.COLUMS() - 1;
                 reffIndex = reffIndex + 1 * operand;
             } else {
                 reffIndex = reffIndex - 1;
@@ -107,7 +143,7 @@ public class Box {
                 generatedIndexs.add(reffIndex);
             }
         } while (numberOfTimesToShift > 0);
-        
+
         return reffIndex;
 
     }
@@ -116,7 +152,7 @@ public class Box {
         ArrayList<Integer> bounds = new ArrayList<>();
         ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
-        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
             if (i != 0) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
                     bounds.add(ROW_COLUMN_COUNT * j + i - 1);
@@ -128,7 +164,7 @@ public class Box {
         do {
             numberOfTimesToShift--;
             if (bounds.contains(reffIndex)) {
-                int operand = fc.ROWS() - 1;
+                int operand = fc.COLUMS() - 1;
                 reffIndex = reffIndex - 1 * operand;
             } else {
                 reffIndex = reffIndex + 1;
@@ -146,7 +182,7 @@ public class Box {
         ArrayList<Integer> bounds = new ArrayList<>();
         ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
-        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             if (i != ROW_COLUMN_COUNT) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
                     bounds.add(ROW_COLUMN_COUNT * i + j);
@@ -157,7 +193,7 @@ public class Box {
         do {
             numberOfTimesToShift--;
             if (bounds.contains(reffIndex)) {
-                int operand = fc.COLUMS() - 1;
+                int operand = fc.ROWS() - 1;
                 reffIndex = reffIndex + ROW_COLUMN_COUNT * operand;
             } else {
                 reffIndex = reffIndex - ROW_COLUMN_COUNT;
@@ -175,7 +211,7 @@ public class Box {
         ArrayList<Integer> bounds = new ArrayList<>();
         ArrayList<Integer> generatedIndexs = new ArrayList<>();
 
-        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.COLUMS()) {
+        for (int i = 0; i <= ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
             if (i != 0) {
                 for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
                     bounds.add(ROW_COLUMN_COUNT * i - ROW_COLUMN_COUNT + j);
@@ -185,7 +221,7 @@ public class Box {
         do {
             numberOfTimesToShift--;
             if (bounds.contains(reffIndex)) {
-                int operand = fc.COLUMS() - 1;
+                int operand = fc.ROWS() - 1;
                 reffIndex = reffIndex - ROW_COLUMN_COUNT * operand;
             } else {
                 reffIndex = reffIndex + ROW_COLUMN_COUNT;

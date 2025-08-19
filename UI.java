@@ -64,10 +64,7 @@ public class UI extends JFrame {
 
         for (int i = 0; i < bx.indexReff.size(); i++) {
             myGrid.SetName(Integer.parseInt(bx.indexReff.get(i)), "7");
-        }
-
-        //Point myPoint = lg.PickRandomPoint();
-        //myGrid.SetName(myPoint.x, myPoint.y, lg.GenerateRandomNumber());       
+        }  
         add(myGrid, BorderLayout.CENTER);
         //we are going to set up a grid..
 
