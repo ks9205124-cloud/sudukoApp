@@ -11,7 +11,7 @@ public class Box {
     int ROW_COLUMN_COUNT;
 
     public int[][] index;
-    public ArrayList<String> indexReff = new ArrayList<>();
+    public ArrayList<Integer> indexReff = new ArrayList<>();
     //generates rows and columns for  suduko.
     FactorGenerator fc;
     //generates the pos to add transformation on.
@@ -23,6 +23,9 @@ public class Box {
     ArrayList<Integer> data_TransformedRow = new ArrayList<>();
     ArrayList<Integer> data_TransformedColumn = new ArrayList<>();
 
+    ArrayList<ArrayList<Integer>> listOfList_PosDefalut = new ArrayList<>();
+    ArrayList<ArrayList<String>> listOfList_reffIndex = new ArrayList<>();
+
     public Box(int ROW_COLUMN_COUNT) {
 
         this.ROW_COLUMN_COUNT = ROW_COLUMN_COUNT;
@@ -33,14 +36,14 @@ public class Box {
 
     public void GeneratePos1Index() {
         posDefault.clear();
-        
+
         transfColumn_ShiftIndes.clear();
         transfRow_ShiftIndexs.clear();
-        
+
         data_TransformedColumn.clear();
         data_TransformedRow.clear();
         
-        /*for (int rows = 0; rows < fc.ROWS(); rows++) {
+        for (int rows = 0; rows < fc.ROWS(); rows++) {
             for (int columns = 0; columns < fc.COLUMS(); columns++) {
                 for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
                     for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
@@ -51,25 +54,24 @@ public class Box {
 
                 }
             }
-        }*/
-        for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
-            for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
-                if (!posDefault.contains(ROW_COLUMN_COUNT * i + j)) {
-                    posDefault.add(ROW_COLUMN_COUNT * i + j);
-                }
-            }
-
         }
+//        for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
+//            for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
+//                if (!posDefault.contains(ROW_COLUMN_COUNT * i + j)) {
+//                    posDefault.add(ROW_COLUMN_COUNT * i + j);
+//                }
+//            }
+//
+//        }
         for (int i = 0; i < posDefault.size(); i++) {
             transfRow_ShiftIndexs.add(Y_Indexs(posDefault.get(i)));
             data_TransformedRow.add(transformDown(posDefault.get(i), ROW_COLUMN_COUNT + transfRow_ShiftIndexs.get(i)));
             transfColumn_ShiftIndes.add(X_Indexs(data_TransformedRow.get(i)));
             data_TransformedColumn.add(transformRight(data_TransformedRow.get(i), ROW_COLUMN_COUNT + transfColumn_ShiftIndes.get(i)));
-            indexReff.add(Integer.toString(data_TransformedColumn.get(i)));
+//            System.err.println(data_TransformedColumn.get(i));
+            indexReff.add(data_TransformedColumn.get(i));
         }
-
     }
-    
 
     public int X_Indexs(int reffIndex) {
         ArrayList<Integer> rowData = new ArrayList<>();

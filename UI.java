@@ -2,6 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+ /*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package suduko;
 
 import java.awt.*;
@@ -62,9 +66,11 @@ public class UI extends JFrame {
         myGrid.SET_ONE_TIME_USE(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT);
         myGrid.SetGrid(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT);
 
-        for (int i = 0; i < bx.indexReff.size(); i++) {
-            myGrid.SetName(Integer.parseInt(bx.indexReff.get(i)), "7");
-        }  
+        for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
+            for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
+                myGrid.SetName(bx.indexReff.get(j), Integer.toString(i +  1));
+            }
+        }
         add(myGrid, BorderLayout.CENTER);
         //we are going to set up a grid..
 
