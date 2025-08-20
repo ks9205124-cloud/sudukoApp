@@ -4,45 +4,40 @@
  */
 package suduko;
 
-import java.awt.*;
+import java.util.ArrayList;
 
 public class Logic {
 
+    public ArrayList<Integer> numberOfRandomNumberIndex = new ArrayList<>();
     int ROW_COLUMN_COUNT;
 
     public Logic(int ROW_COLUMN_COUNT) {
-        this.ROW_COLUMN_COUNT = ROW_COLUMN_COUNT;
+        this.ROW_COLUMN_COUNT = ROW_COLUMN_COUNT;        
     }
 
-    Point PickRandomPoint() {
-        return new Point(_GenerateRandomNumber(), _GenerateRandomNumber());
+    public void numberOfRandomNumberToGenerate(int number) {
+        for (int i = 0; i < 100000; i++) {
+            int reff = GenerateRandomNumber();
+            if (!numberOfRandomNumberIndex.contains(reff) && numberOfRandomNumberIndex.size() < number) {
+                numberOfRandomNumberIndex.add(reff);
+            }
+        }
     }
 
-    //we have to seprate function because GenerateRandomNumber will not generate 0 but _GenerateRandomNumber will.
-    int GenerateRandomNumber() {
+
+    private int GenerateRandomNumber() {
         float i = (float) Math.random();
-        float reffFloat = (float) 1 / ROW_COLUMN_COUNT;
-        for (int j = 0; j < ROW_COLUMN_COUNT + 1; j++) {
+        int tst = ROW_COLUMN_COUNT * ROW_COLUMN_COUNT;
+        float reffFloat = (float) 1 / tst;
+        for (int j = 0; j < tst + 1; j++) {
             float tt = (float) reffFloat * j + reffFloat;
             if (reffFloat * j > i && i < tt) {
-                return j;
+                if (j != tst) {
+                    return j;
+                }
             }
         }
         return 0;
     }
 
-    //created to access array data
-    private int _GenerateRandomNumber() {
-        float i = (float) Math.random();
-        float reffFloat = (float) 1 / ROW_COLUMN_COUNT;
-        for (int j = 0; j < ROW_COLUMN_COUNT; j++) {
-            float tt = (float) reffFloat * j + reffFloat;
-            if (reffFloat * j > i && i < tt) {
-                return j;
-            }
-        }
-        return 0;
-    }
-    
 }
-

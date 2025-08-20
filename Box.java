@@ -55,20 +55,11 @@ public class Box {
                 }
             }
         }
-//        for (int i = 0; i < ROW_COLUMN_COUNT; i = i + fc.ROWS()) {
-//            for (int j = 0; j < ROW_COLUMN_COUNT; j = j + fc.COLUMS()) {
-//                if (!posDefault.contains(ROW_COLUMN_COUNT * i + j)) {
-//                    posDefault.add(ROW_COLUMN_COUNT * i + j);
-//                }
-//            }
-//
-//        }
         for (int i = 0; i < posDefault.size(); i++) {
             transfRow_ShiftIndexs.add(Y_Indexs(posDefault.get(i)));
             data_TransformedRow.add(transformDown(posDefault.get(i), ROW_COLUMN_COUNT + transfRow_ShiftIndexs.get(i)));
             transfColumn_ShiftIndes.add(X_Indexs(data_TransformedRow.get(i)));
             data_TransformedColumn.add(transformRight(data_TransformedRow.get(i), ROW_COLUMN_COUNT + transfColumn_ShiftIndes.get(i)));
-//            System.err.println(data_TransformedColumn.get(i));
             indexReff.add(data_TransformedColumn.get(i));
         }
     }

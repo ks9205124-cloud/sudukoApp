@@ -13,6 +13,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class UI extends JFrame {
+    
+    Logic lg;
 
     //rigid ui objects.
     JLabel nameLabel = new JLabel("My Suduko");
@@ -34,6 +36,8 @@ public class UI extends JFrame {
     public void CreateSuduko(int WIDTH, int HEIGHT, int ROW_COLUMN_COUNT) {
 
         this.ROW_COLUMN_COUNT = ROW_COLUMN_COUNT;
+        
+        lg = new Logic(ROW_COLUMN_COUNT);
 
         ERASER.setText("ERASER *" + ERASER_COUNT);
 
@@ -64,12 +68,19 @@ public class UI extends JFrame {
         bx.GeneratePos1Index();
 
         myGrid.SET_ONE_TIME_USE(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT);
-        myGrid.SetGrid(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT);
-
+        myGrid.SetGrid();
+        
+        //populates the whole grid.
         for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
             for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
                 myGrid.SetName(bx.indexReff.get(j), Integer.toString(i +  1));
             }
+        }
+        //removes specified number of gridBoxes
+        lg.numberOfRandomNumberToGenerate(40);
+        for (int i = 0; i < lg.numberOfRandomNumberIndex.size(); i++) {
+            myGrid.SetName(lg.numberOfRandomNumberIndex.get(i), "");
+            myGrid.update();
         }
         add(myGrid, BorderLayout.CENTER);
         //we are going to set up a grid..
