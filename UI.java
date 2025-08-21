@@ -8,13 +8,11 @@
  */
 package suduko;
 
-import com.sun.net.httpserver.Authenticator;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class UI extends JFrame {
-
     Logic lg;
 
     //rigid ui objects.
