@@ -8,18 +8,19 @@
  */
 package suduko;
 
+import com.sun.net.httpserver.Authenticator;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class UI extends JFrame {
-    
+
     Logic lg;
 
     //rigid ui objects.
     JLabel nameLabel = new JLabel("My Suduko");
     JButton ERASER = new JButton();
-    private final JButton backButton = new JButton("Back");
+    private final JButton BACK = new JButton("Check");
     //no. keys
     private JButton[] sudukoButton;
     //default no. key
@@ -36,7 +37,7 @@ public class UI extends JFrame {
     public void CreateSuduko(int WIDTH, int HEIGHT, int ROW_COLUMN_COUNT) {
 
         this.ROW_COLUMN_COUNT = ROW_COLUMN_COUNT;
-        
+
         lg = new Logic(ROW_COLUMN_COUNT);
 
         ERASER.setText("ERASER *" + ERASER_COUNT);
@@ -46,14 +47,6 @@ public class UI extends JFrame {
         setName("My Suduko");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //layout for main frame
-        setLayout(new BorderLayout(25, 25));
-
-        //layout for JPanel_TOP : MENU_BAR_TOP
-        JPanel MENU_BAR_TOP = new JPanel(new BorderLayout());
-        MENU_BAR_TOP.add(nameLabel, BorderLayout.WEST);
-        MENU_BAR_TOP.add(backButton, BorderLayout.EAST);
-        add(MENU_BAR_TOP, BorderLayout.NORTH);
 
         //layout for JPanel_CENTER : SUDUKO_GRID
         Grid myGrid = new Grid(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT, this, MENU_BAR_BOTTOM) {
@@ -67,17 +60,43 @@ public class UI extends JFrame {
         Box bx = new Box(ROW_COLUMN_COUNT);
         bx.GeneratePos1Index();
 
+        //layout for main frame
+        setLayout(new BorderLayout(25, 25));
+
+        //layout for JPanel_TOP : MENU_BAR_TOP
+        JPanel MENU_BAR_TOP = new JPanel(new BorderLayout());
+        MENU_BAR_TOP.add(nameLabel, BorderLayout.WEST);
+        MENU_BAR_TOP.add(BACK, BorderLayout.EAST);
+
+        ActionListener actionListenerTop = (event) -> {
+            if (event.getSource() == BACK) {
+                for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
+                    for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
+                        if (myGrid.GetName(bx.indexReff.get(j)).equals(Integer.toString(i + 1))) {
+                            System.err.println("success");
+                        } else {
+                            System.err.println("failed");
+                        }
+                    }
+                }
+            }
+        };
+        BACK.addActionListener(actionListenerTop);
+
+        add(MENU_BAR_TOP, BorderLayout.NORTH);
+
         myGrid.SET_ONE_TIME_USE(ROW_COLUMN_COUNT, ROW_COLUMN_COUNT);
         myGrid.SetGrid();
-        
+
         //populates the whole grid.
+        lg._numberOfRandomNumberToGenerate(this.ROW_COLUMN_COUNT);
         for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
             for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
-                myGrid.SetName(bx.indexReff.get(j), Integer.toString(i +  1));
+                myGrid.SetName(bx.indexReff.get(j), Integer.toString(lg._numberOfRandomNumberIndex.get(i) + 1));
             }
         }
         //removes specified number of gridBoxes
-        lg.numberOfRandomNumberToGenerate(40);
+        lg.numberOfRandomNumberToGenerate(((ROW_COLUMN_COUNT * ROW_COLUMN_COUNT) + 5 - ROW_COLUMN_COUNT * 4));
         for (int i = 0; i < lg.numberOfRandomNumberIndex.size(); i++) {
             myGrid.SetName(lg.numberOfRandomNumberIndex.get(i), "");
             myGrid.update();

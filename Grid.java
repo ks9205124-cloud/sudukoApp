@@ -19,8 +19,8 @@ public class Grid extends JPanel {
     boolean[][] isEditable;
     //adds responsive feel in ui
     UI Ui;
-    
-    int ROWS,COLUMNS;
+
+    int ROWS, COLUMNS;
 
     public Grid(int ROWS, int COLUMNS, UI Ui, JPanel MENU_BAR_BOTTOM) {
 
@@ -66,15 +66,19 @@ public class Grid extends JPanel {
                         }
                         //combination of two bool to determine correct sequence of input
                         if (Ui.IS_ERASER == true && oneTimeUse[_reffNo_i][_reffNo_j] == Boolean.TRUE) {
-                            Ui.ERASER_COUNT--;
-                            Ui.ERASER.setText("ERASER *" + Ui.ERASER_COUNT);
+                            if (!gridButton[_reffNo_i][_reffNo_j].getText().equals("") && isEditable[_reffNo_i][_reffNo_j]) {
+                                Ui.ERASER_COUNT--;
+                                Ui.ERASER.setText("ERASER *" + Ui.ERASER_COUNT);
+                            }
                             oneTimeUse[_reffNo_i][_reffNo_j] = Boolean.TRUE;
                             SetText(_reffNo_i, _reffNo_j);
                             System.out.println(Ui.ERASER_COUNT);
 
                         } else if (Ui.IS_ERASER == true && oneTimeUse[_reffNo_i][_reffNo_j] == Boolean.FALSE) {
-                            Ui.ERASER_COUNT--;
-                            Ui.ERASER.setText("ERASER *" + Ui.ERASER_COUNT);
+                            if (!gridButton[_reffNo_i][_reffNo_j].getText().equals("") && isEditable[_reffNo_i][_reffNo_j]) {
+                                Ui.ERASER_COUNT--;
+                                Ui.ERASER.setText("ERASER *" + Ui.ERASER_COUNT);
+                            }
                             oneTimeUse[_reffNo_i][_reffNo_j] = Boolean.TRUE;
                             SetText(_reffNo_i, _reffNo_j);
 
@@ -119,6 +123,9 @@ public class Grid extends JPanel {
 
     public void SetName(int index, String myName) {
         testButtonList.get(index).setText(myName);
+    }
+    public String GetName(int index){
+        return testButtonList.get(index).getText();
     }
 
     //name of button is set here.
