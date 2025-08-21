@@ -10,10 +10,16 @@ package suduko;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class UI extends JFrame {
+
+    int count = 0;
+
     Logic lg;
+
+    ArrayList<Integer> result = new ArrayList<>();
 
     //rigid ui objects.
     JLabel nameLabel = new JLabel("My Suduko");
@@ -67,17 +73,46 @@ public class UI extends JFrame {
         MENU_BAR_TOP.add(BACK, BorderLayout.EAST);
 
         ActionListener actionListenerTop = (event) -> {
-            if (event.getSource() == BACK) {
+            if (event.getSource() == BACK && count == 0) {
                 for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
                     for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
-                        if (myGrid.GetName(bx.indexReff.get(j)).equals(Integer.toString(i + 1))) {
-                            System.err.println("success");
+                        int k = lg._numberOfRandomNumberIndex.get(i) + 1;
+                        if (myGrid.GetName(bx.indexReff.get(j)).equals(Integer.toString(k))) {
+                            result.add(1);
                         } else {
-                            System.err.println("failed");
+                            result.add(0);
                         }
                     }
                 }
+                if (result.contains(0)) {
+                    nameLabel.setText("opps you missed click -->> to generate answer");
+                    BACK.setText("generate Answer");
+                    count++;
+                    return;
+                } else if (result.contains(1)) {
+                    nameLabel.setText("Yaay!! you won click -->> to close");
+                    BACK.setText("close");
+                    count = 2;
+                    return;
+                }
             }
+            if (event.getSource() == BACK && count == 1) {
+                BACK.setText("close");
+                if (result.contains(0)) {
+                    lg._numberOfRandomNumberToGenerate(this.ROW_COLUMN_COUNT);
+                    for (int i = 0; i < ROW_COLUMN_COUNT; i++) {
+                        for (int j = ROW_COLUMN_COUNT * i; j < ROW_COLUMN_COUNT * (i + 1); j++) {
+                            myGrid.SetName(bx.indexReff.get(j), Integer.toString(lg._numberOfRandomNumberIndex.get(i) + 1));
+                        }
+                    }
+                }
+                count++;
+                return;
+            }
+            if (event.getSource() == BACK && count == 2) {
+                this.dispose();
+            }
+
         };
         BACK.addActionListener(actionListenerTop);
 
@@ -93,7 +128,7 @@ public class UI extends JFrame {
                 myGrid.SetName(bx.indexReff.get(j), Integer.toString(lg._numberOfRandomNumberIndex.get(i) + 1));
             }
         }
-        //removes specified number of gridBoxes
+//        removes specified number of gridBoxes
         lg.numberOfRandomNumberToGenerate(((ROW_COLUMN_COUNT * ROW_COLUMN_COUNT) + 5 - ROW_COLUMN_COUNT * 4));
         for (int i = 0; i < lg.numberOfRandomNumberIndex.size(); i++) {
             myGrid.SetName(lg.numberOfRandomNumberIndex.get(i), "");

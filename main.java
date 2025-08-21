@@ -32,7 +32,7 @@ public class main extends JFrame {
                     UI ui = new UI();
                     ui.CreateSuduko(900, 700, Integer.parseInt(txtField.getText()));
                     jf.dispose();
-                } catch (NumberFormatException ex) {
+                } catch (Exception ex) {
                     txtField.setText("eneter-non prime Int");
                 }
             }

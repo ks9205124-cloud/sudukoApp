@@ -7,7 +7,7 @@ package suduko;
 import java.util.ArrayList;
 
 public class Box {
-
+    
     int ROW_COLUMN_COUNT;
 
     public int[][] index;
