@@ -1,6 +1,18 @@
 # 🧩 SudokuApp
 
-An advanced Sudoku game built in Java that lets you generate and play Sudoku puzzles of **any size** — not just the traditional 9×9 grid.
+An advanced Sudoku game built with **vanilla Java and Swing** — no frameworks, no external libraries — that lets you generate and play Sudoku puzzles of **any size** — not just the traditional 9×9 grid.
+
+### How it works under the hood
+
+Most Sudoku apps hardcode a fixed 9×9 board. This app takes a different approach — it dynamically builds a valid puzzle for any `n×n` size you choose.
+
+The process works in three stages:
+
+1. **Generate a solved grid** — The app first creates a fully valid, completed `n×n` Sudoku solution using randomised number placement, ensuring every row, column, and sub-box satisfies Sudoku rules.
+2. **Remove random cells** — A calculated number of cells are then cleared from the solved grid, leaving behind the clues (pre-filled numbers) and the blanks the player needs to figure out.
+3. **Present the puzzle** — The resulting board is handed to the player to solve. If they get stuck, the original solution is still stored and can be revealed on request.
+
+This "solve-first, then hide" approach guarantees that every generated puzzle has exactly one valid solution — the one that was computed at the start.
 
 ---
 
