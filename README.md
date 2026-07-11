@@ -1,4 +1,4 @@
-# 🧩 SudokuApp
+# SudokuApp
 
 An advanced Sudoku game built with **vanilla Java and Swing** — no frameworks, no external libraries — that lets you generate and play Sudoku puzzles of **any size** — not just the traditional 9×9 grid.
 
